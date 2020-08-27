@@ -1,9 +1,9 @@
 import cv2
 
-src = cv2.imread("src10.jpg", cv2.IMREAD_COLOR)
+src = cv2.imread("src.jpg", cv2.IMREAD_COLOR)
 
 W = 11
-H = 2
+H = 3
 
 inpormation = src.shape
 height = inpormation[0]
@@ -22,7 +22,8 @@ for l in range(H):
 
         for i in range(224):
             for j in range(224):
-                if dst.item(i, j, 0) + dst.item(i, j, 1) + dst.item(i, j, 2) > 400:
+                #print(dst.item(i,j,0), dst.item(i,j,1), dst.item(i,j,2), )
+                if dst.item(i, j, 0) + dst.item(i, j, 1) + dst.item(i, j, 2) >= 560:
                     for m in range(3):
                         dst.itemset(i, j, m, 255)
                 else:
