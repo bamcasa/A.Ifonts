@@ -5,10 +5,12 @@ import numpy as np
 base = cv2.imread("correct_image/test.png")
 
 
-def double(mo_name, mo_path, ja_dir, mo_start, ja_start):
+def double(mo_path, ja_dir, mo_start, ja_start):
     """초성, 중성으로 구성된 음운 생성"""
-    mo_unicode_name = str(mo_name.encode("unicode_escape")).replace(
-        "b'\\\\u", "").replace("'", "")  # 유니코드 값
+    mo_filename = mo_path[-8:]  # 모음 이미지 파일 이름
+    mo_unicode_str = mo_filename[0:4]  # 모음 유니코드 값 (4자리)
+    mo_name = bytes(
+        "\\u" + mo_unicode_str.lower(), "utf8").decode("unicode_escape")  # 모음 한글
 
     ja_list = os.listdir(ja_dir)
 
@@ -21,6 +23,10 @@ def double(mo_name, mo_path, ja_dir, mo_start, ja_start):
 
     """모음의 전체 개수로 변경 예정"""
     for ja_filename in ja_list:
+        ja_unicode_str = ja_filename[0:4]  # 자음 유니코드 값 (4자리)
+        ja_name = bytes(
+            "\\u" + ja_unicode_str.lower(), "utf8").decode("unicode_escape")  # 자음 한글
+
         base[mo_height_start:mo_height_start+mo_height,
              mo_width_start:mo_width_start+mo_width] = mo  # 모음 합성
 
@@ -37,13 +43,17 @@ def double(mo_name, mo_path, ja_dir, mo_start, ja_start):
         cv2.imshow("base", base)
         cv2.waitKey(0)
 
+        print(chr(get_unicode_int(ja_name, mo_name)))
+
         base[:, :] = 255  # 베이스 초기화
 
 
-def triple(mo_name, mo_path, ja1_dir, ja2_dir, mo_start, ja1_start, ja2_start):
+def triple(mo_path, ja1_dir, ja2_dir, mo_start, ja1_start, ja2_start):
     """초성, 중성, 종성으로 구성된 음운 생성"""
-    mo_unicode_name = str(mo_name.encode("unicode_escape")).replace(
-        "b'\\\\u", "").replace("'", "")  # 유니코드 값
+    mo_filename = mo_path[-8:]  # 모음 이미지 파일 이름
+    mo_unicode_str = mo_filename[0:4]  # 모음 유니코드 값 (4자리)
+    mo_name = bytes(
+        "\\u" + mo_unicode_str.lower(), "utf8").decode("unicode_escape")  # 모음 한글
 
     ja1_list = os.listdir(ja1_dir)  # 초성 이미지 목록
     ja2_list = os.listdir(ja2_dir)  # 종성 이미지 목록
@@ -57,7 +67,15 @@ def triple(mo_name, mo_path, ja1_dir, ja2_dir, mo_start, ja1_start, ja2_start):
 
     """모음의 전체 개수로 변경 예정"""
     for ja1_filename in ja1_list:
+        ja1_unicode_str = ja1_filename[0:4]  # 초성 유니코드 값 (4자리)
+        ja1_name = bytes(
+            "\\u" + ja1_unicode_str.lower(), "utf8").decode("unicode_escape")  # 초성 한글
+
         for ja2_filename in ja2_list:
+            ja2_unicode_str = ja2_filename[0:4]  # 종성 유니코드 값 (4자리)
+            ja2_name = bytes(
+                "\\u" + ja2_unicode_str.lower(), "utf8").decode("unicode_escape")  # 종성 한글
+
             base[mo_height_start:mo_height_start+mo_height,
                  mo_width_start:mo_width_start+mo_width] = mo  # 모음 합성
 
@@ -86,15 +104,37 @@ def triple(mo_name, mo_path, ja1_dir, ja2_dir, mo_start, ja1_start, ja2_start):
             cv2.imshow("base", base)
             cv2.waitKey(0)
 
+            print(chr(get_unicode_int(ja1_name, mo_name, ja2_name)))
+
             base[:, :] = 255  # 베이스 초기화
 
 
-double(mo_name="ㅏ", mo_path="glyph/mo/7.jpg",
-       ja_dir="glyph/cho", mo_start=(75, 110), ja_start=(80, 60))
-double(mo_name="ㅔ", mo_path="glyph/mo/8.jpg",
-       ja_dir="glyph/cho", mo_start=(53, 110), ja_start=(80, 60))
+def get_unicode_int(ja1_name, mo_name, ja2_name=""):
+    """글자의 유니코드 정수값 생성"""
+    ja1_table = ["ㄱ", "ㄲ", "ㄴ", "ㄷ", "ㄸ", "ㄹ", "ㅁ", "ㅂ", "ㅃ",
+                 "ㅅ", "ㅆ", "ㅇ", "ㅈ", "ㅉ", "ㅊ", "ㅋ", "ㅌ", "ㅍ", "ㅎ"]
 
-triple(mo_name="ㅏ", mo_path="glyph/mo/7.jpg", ja1_dir="glyph/cho",
+    mo_table = ["ㅏ", "ㅐ", "ㅑ", "ㅒ", "ㅓ", "ㅔ", "ㅕ", "ㅖ", "ㅗ", "ㅘ",
+                "ㅙ", "ㅚ", "ㅛ", "ㅜ", "ㅝ", "ㅞ", "ㅟ", "ㅠ", "ㅡ", "ㅢ", "ㅣ"]
+
+    ja2_table = ["", "ㄱ", "ㄲ", "ㄳ", "ㄴ", "ㄵ", "ㄶ", "ㄷ", "ㄹ", "ㄺ", "ㄻ", "ㄼ", "ㄽ",
+                 "ㄾ", "ㄿ", "ㅀ", "ㅁ", "ㅂ", "ㅄ", "ㅅ", "ㅆ", "ㅇ", "ㅈ", "ㅊ", "ㅋ", "ㅌ", "ㅍ", "ㅎ"]
+
+    ja1_index = ja1_table.index(ja1_name)
+    mo_index = mo_table.index(mo_name)
+    ja2_index = ja2_table.index(ja2_name)
+
+    unicode_int = (ja1_index*588 + mo_index*28 + ja2_index) + 44032
+    return unicode_int
+
+
+# double(mo_path="glyph/mo/314F.jpg",
+#        ja_dir="glyph/cho", mo_start=(75, 110), ja_start=(80, 60))
+
+# double(mo_path="glyph/mo/3154.jpg",
+#        ja_dir="glyph/cho", mo_start=(53, 110), ja_start=(80, 60))
+
+triple(mo_path="glyph/mo/314F.jpg", ja1_dir="glyph/cho",
        ja2_dir="glyph/jong", mo_start=(55, 110), ja1_start=(60, 60), ja2_start=(130, 80))
 
 cv2.destroyAllWindows()
