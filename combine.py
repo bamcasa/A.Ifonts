@@ -188,6 +188,15 @@ def get_unicode_int(ja1_name, mo_name, ja2_name=""):
 # double(mo_path="glyph/mo/315A.png",
 #        ja_dir="glyph/cho", mo_start=(80, 50), ja_start=(45, 75))  # ㅚ
 
+# double(mo_path="glyph/mo/3156.png",
+#        ja_dir="glyph/cho", mo_start=(60, 100), ja_start=(80, 45))  # ㅖ
+
+# double(mo_path="glyph/mo/315C.png",
+#        ja_dir="glyph/cho", mo_start=(110, 40), ja_start=(40, 70))  # ㅜ
+
+# double(mo_path="glyph/mo/3162.png",
+#        ja_dir="glyph/cho", mo_start=(60, 50), ja_start=(40, 60))  # ㅢ
+
 ''''''
 
 # triple(mo_path="glyph/mo/314F.png", ja1_dir="glyph/cho",
@@ -243,3 +252,12 @@ def get_unicode_int(ja1_name, mo_name, ja2_name=""):
 
 # triple(mo_path="glyph/mo/315A.png", ja1_dir="glyph/cho",
 #        ja2_dir="glyph/jong", mo_start=(50, 50), ja1_start=(25, 80), ja2_start=(145, 90))  # ㅚ
+
+# triple(mo_path="glyph/mo/3156.png", ja1_dir="glyph/cho",
+#        ja2_dir="glyph/jong", mo_start=(50, 110), ja1_start=(50, 60), ja2_start=(135, 80))  # ㅖ
+
+# triple(mo_path="glyph/mo/315C.png", ja1_dir="glyph/cho",
+#        ja2_dir="glyph/jong", mo_start=(60, 50), ja1_start=(20, 80), ja2_start=(145, 70))  # ㅜ
+
+# triple(mo_path="glyph/mo/3162.png", ja1_dir="glyph/cho",
+#        ja2_dir="glyph/jong", mo_start=(40, 50), ja1_start=(30, 70), ja2_start=(145, 70))  # ㅢ
