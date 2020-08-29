@@ -8,7 +8,7 @@ base = cv2.imread("correct_image/test.png")
 def double(mo_path, ja_dir, mo_start, ja_start):
     """초성, 중성으로 구성된 음운 생성"""
     mo_filename = mo_path[-8:]  # 모음 이미지 파일 이름
-    mo_unicode_str = mo_filename[0:4]  # 모음 유니코드 값 (4자리)
+    mo_unicode_str = mo_filename[:4]  # 모음 유니코드 값 (4자리)
     mo_name = bytes(
         "\\u" + mo_unicode_str.lower(), "utf8").decode("unicode_escape")  # 모음 한글
 
@@ -21,9 +21,8 @@ def double(mo_path, ja_dir, mo_start, ja_start):
     mo_height_start = mo_start[0]
     mo_width_start = mo_start[1]
 
-    """모음의 전체 개수로 변경 예정"""
     for ja_filename in ja_list:
-        ja_unicode_str = ja_filename[0:4]  # 자음 유니코드 값 (4자리)
+        ja_unicode_str = ja_filename[:4]  # 자음 유니코드 값 (4자리)
         ja_name = bytes(
             "\\u" + ja_unicode_str.lower(), "utf8").decode("unicode_escape")  # 자음 한글
 
@@ -55,7 +54,7 @@ def double(mo_path, ja_dir, mo_start, ja_start):
 def triple(mo_path, ja1_dir, ja2_dir, mo_start, ja1_start, ja2_start):
     """초성, 중성, 종성으로 구성된 음운 생성"""
     mo_filename = mo_path[-8:]  # 모음 이미지 파일 이름
-    mo_unicode_str = mo_filename[0:4]  # 모음 유니코드 값 (4자리)
+    mo_unicode_str = mo_filename[:4]  # 모음 유니코드 값 (4자리)
     mo_name = bytes(
         "\\u" + mo_unicode_str.lower(), "utf8").decode("unicode_escape")  # 모음 한글
 
@@ -69,14 +68,13 @@ def triple(mo_path, ja1_dir, ja2_dir, mo_start, ja1_start, ja2_start):
     mo_height_start = mo_start[0]
     mo_width_start = mo_start[1]
 
-    """모음의 전체 개수로 변경 예정"""
     for ja1_filename in ja1_list:
-        ja1_unicode_str = ja1_filename[0:4]  # 초성 유니코드 값 (4자리)
+        ja1_unicode_str = ja1_filename[:4]  # 초성 유니코드 값 (4자리)
         ja1_name = bytes(
             "\\u" + ja1_unicode_str.lower(), "utf8").decode("unicode_escape")  # 초성 한글
 
         for ja2_filename in ja2_list:
-            ja2_unicode_str = ja2_filename[0:4]  # 종성 유니코드 값 (4자리)
+            ja2_unicode_str = ja2_filename[:4]  # 종성 유니코드 값 (4자리)
             ja2_name = bytes(
                 "\\u" + ja2_unicode_str.lower(), "utf8").decode("unicode_escape")  # 종성 한글
 
@@ -101,6 +99,12 @@ def triple(mo_path, ja1_dir, ja2_dir, mo_start, ja1_start, ja2_start):
             # 종성 합성 시작점 설정
             ja2_height_start = ja2_start[0]
             ja2_width_start = ja2_start[1]
+
+            print("종성 세로 시작점 : ", ja2_height_start)
+            print("종성 가로 시작점 : ", ja2_width_start)
+
+            print("종성 세로 길이", ja2_height)
+            print("종성 가로 길이", ja2_width)
 
             base[ja2_height_start:ja2_height_start+ja2_height,
                  ja2_width_start:ja2_width_start+ja2_width] = ja2  # 종성 합성
@@ -136,13 +140,23 @@ def get_unicode_int(ja1_name, mo_name, ja2_name=""):
     return unicode_int
 
 
-# double(mo_path="glyph/mo/314F.jpg",
-#        ja_dir="glyph/cho", mo_start=(75, 110), ja_start=(80, 60))
+# double(mo_path="glyph/mo/314F.png",
+#        ja_dir="glyph/cho", mo_start=(75, 110), ja_start=(80, 60)) # ㅏ
 
-# double(mo_path="glyph/mo/3154.jpg",
-#        ja_dir="glyph/cho", mo_start=(53, 110), ja_start=(80, 60))
+# double(mo_path="glyph/mo/3154.png",
+#        ja_dir="glyph/cho", mo_start=(53, 110), ja_start=(80, 60)) # ㅔ
 
-triple(mo_path="glyph/mo/314F.jpg", ja1_dir="glyph/cho",
-       ja2_dir="glyph/jong", mo_start=(55, 110), ja1_start=(60, 60), ja2_start=(130, 80))
+# double(mo_path="glyph/mo/3157.png",
+#        ja_dir="glyph/cho", mo_start=(110, 70), ja_start=(60, 90))  # ㅗ
+
+# double(mo_path="glyph/mo/315F.png",
+#        ja_dir="glyph/cho", mo_start=(60, 50), ja_start=(40, 50))  # ㅟ
+
+# double(mo_path="glyph/mo/3154.png",
+#        ja_dir="glyph/cho", mo_start=(63, 110), ja_start=(80, 40))  # ㅓ
+
+
+# triple(mo_path="glyph/mo/314F.png", ja1_dir="glyph/cho",
+#        ja2_dir="glyph/jong", mo_start=(55, 110), ja1_start=(60, 60), ja2_start=(129, 80)) #ㅏ
 
 cv2.destroyAllWindows()
