@@ -12,10 +12,10 @@ def double(mo_path, ja_dir, mo_start, ja_start):
     mo_name = bytes(
         "\\u" + mo_unicode_str.lower(), "utf8").decode("unicode_escape")  # 모음 한글
 
-    ja_list = os.listdir(ja_dir)
+    ja_list = os.listdir(ja_dir)  # 자음 이미지 목록
 
     mo = cv2.imread(mo_path)  # 모음 불러오기
-    mo_height, mo_width, _ = mo.shape  # 모음 픽셀 정보
+    mo_height, mo_width, _ = mo.shape  # 모음 픽셀 정보 저장
 
     # 모음 합성 시작점 설정
     mo_height_start = mo_start[0]
@@ -31,7 +31,7 @@ def double(mo_path, ja_dir, mo_start, ja_start):
              mo_width_start:mo_width_start+mo_width] = mo  # 모음 합성
 
         ja = cv2.imread(f"{ja_dir}/{ja_filename}")  # 자음 불러오기
-        ja_height, ja_width, _ = ja.shape  # 자음 픽셀 정보
+        ja_height, ja_width, _ = ja.shape  # 자음 픽셀 정보 저장
 
         # 자음 합성 시작점 설정
         ja_height_start = ja_start[0]
@@ -40,10 +40,14 @@ def double(mo_path, ja_dir, mo_start, ja_start):
         base[ja_height_start:ja_height_start+ja_height,
              ja_width_start:ja_width_start+ja_width] = ja  # 자음 합성
 
-        cv2.imshow("base", base)
-        cv2.waitKey(0)
+        if not os.path.exists("save_dir"):
+            os.mkdir("save_dir")
 
-        print(chr(get_unicode_int(ja_name, mo_name)))
+        glyph_name = chr(get_unicode_int(ja_name, mo_name))
+        glyph_unicode_str = str(glyph_name.encode("unicode_escape")).replace(
+            "b'\\\\u", "").replace("'", "").upper()  # 완성된 글자의 유니코드 값 (4자리)
+
+        cv2.imwrite(f"save_dir/{glyph_unicode_str}.png", base)
 
         base[:, :] = 255  # 베이스 초기화
 
@@ -59,7 +63,7 @@ def triple(mo_path, ja1_dir, ja2_dir, mo_start, ja1_start, ja2_start):
     ja2_list = os.listdir(ja2_dir)  # 종성 이미지 목록
 
     mo = cv2.imread(mo_path)  # 모음 불러오기
-    mo_height, mo_width, _ = mo.shape  # 모음 픽셀 정보
+    mo_height, mo_width, _ = mo.shape  # 모음 픽셀 정보 저장
 
     # 모음 합성 시작점 설정
     mo_height_start = mo_start[0]
@@ -80,7 +84,7 @@ def triple(mo_path, ja1_dir, ja2_dir, mo_start, ja1_start, ja2_start):
                  mo_width_start:mo_width_start+mo_width] = mo  # 모음 합성
 
             ja1 = cv2.imread(f"{ja1_dir}/{ja1_filename}")  # 초성 불러오기
-            ja1_height, ja1_width, _ = ja1.shape  # 초성 픽셀 정보
+            ja1_height, ja1_width, _ = ja1.shape  # 초성 픽셀 정보 저장
 
             # 초성 합성 시작점 설정
             ja1_height_start = ja1_start[0]
@@ -92,7 +96,7 @@ def triple(mo_path, ja1_dir, ja2_dir, mo_start, ja1_start, ja2_start):
             '''초성/종성 구분선'''
 
             ja2 = cv2.imread(f"{ja2_dir}/{ja2_filename}")  # 종성 불러오기
-            ja2_height, ja2_width, _ = ja2.shape  # 종성 픽셀 정보
+            ja2_height, ja2_width, _ = ja2.shape  # 종성 픽셀 정보 저장
 
             # 종성 합성 시작점 설정
             ja2_height_start = ja2_start[0]
@@ -101,10 +105,14 @@ def triple(mo_path, ja1_dir, ja2_dir, mo_start, ja1_start, ja2_start):
             base[ja2_height_start:ja2_height_start+ja2_height,
                  ja2_width_start:ja2_width_start+ja2_width] = ja2  # 종성 합성
 
-            cv2.imshow("base", base)
-            cv2.waitKey(0)
+            if not os.path.exists("save_dir"):
+                os.mkdir("save_dir")
 
-            print(chr(get_unicode_int(ja1_name, mo_name, ja2_name)))
+            glyph_name = chr(get_unicode_int(ja1_name, mo_name, ja2_name))
+            glyph_unicode_str = str(glyph_name.encode("unicode_escape")).replace(
+                "b'\\\\u", "").replace("'", "").upper()  # 완성된 글자의 유니코드 값 (4자리)
+
+            cv2.imwrite(f"save_dir/{glyph_unicode_str}.png", base)
 
             base[:, :] = 255  # 베이스 초기화
 
